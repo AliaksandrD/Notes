@@ -19,7 +19,7 @@ from . import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     re_path(r'^$',views.HomePage.as_view(),name='home'),
-    re_path(r"^login/", include("notes.urls", namespace="login")),
+    re_path(r"^login/", include("login.urls", namespace="login")),
     re_path(r"^loggedin/$", views.LoggedIn.as_view(), name="logged_in"),
     re_path(r"^thanks/$", views.ThanksPage.as_view(), name="thanks"),
     re_path(r"^login/", include("django.contrib.auth.urls")),
