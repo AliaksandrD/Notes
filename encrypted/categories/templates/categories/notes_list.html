@@ -1,0 +1,29 @@
+{% extends "categories/categories_base.html" %}
+
+{% block categories %}
+<div class="row"></div>
+<div class="col-md-4">
+	<p>{{ user|capfirst }} Notes</p>
+       
+<div class="container">
+    {% for note in object_list %}
+    
+        {% if user.is_authenticated %}
+          
+        
+    
+    
+        <a href="{% url 'categories:notes_detail' pk=note.pk %}"> <h1>{{note.name}}</h1></a>
+       
+        
+        {% endif %}
+    {% endfor %}
+    
+	    
+
+</div>
+
+</div>
+
+
+{% endblock %}
