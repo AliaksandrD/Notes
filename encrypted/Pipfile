@@ -6,7 +6,9 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
-python3-6 = "*"
+django = "==2.2.4"
+simple-crypt = "*"
+django-bootstrap3 = "*"
 
 [requires]
 python_version = "3.7"
