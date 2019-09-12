@@ -17,7 +17,7 @@
 
     <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
 
-    <link rel="stylesheet" href="{% static 'simplesocial/css/master.css'%}">
+    <link rel="stylesheet" href="{% static 'encrypted/css/master.css'%}">
 
 
   </head>
@@ -32,8 +32,8 @@
 
     					<ul class="nav navbar-nav navbar-right">
     						{% if user.is_authenticated %}
-                      <li><a href="#" class="btn btn-simple">Categories</a></li>
-                      <li><a href="#" class="btn btn-simple">All Notes</a></li>
+                      <li><a href="{% url 'categories:all' %}" class="btn btn-simple">Categories</a></li>
+                      
                       <li><a href="{% url 'login:logout' %}" class="btn btn-simple">Log out</a></li>
     						{% else %}
     						      <li><a href="{% url 'login:login' %}" class="btn btn-simple">Log in</a></li>
