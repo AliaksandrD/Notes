@@ -1,0 +1,14 @@
+{% extends "categories/categories_base.html" %}
+
+{% block content %}
+<h3>Are you sure you want to delete this Note?</h3>
+
+
+
+<form method="POST">
+	{% csrf_token %}
+	<input type="submit" value="Confirm Delete" class="btn btn-danger btn-large">
+	<a href="{% url 'categories:notes_detail' pk=object.pk %}" class="btn btn-light btn-large">Cancel</a>
+</form>
+
+{% endblock %}
