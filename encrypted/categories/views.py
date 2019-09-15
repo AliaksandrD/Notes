@@ -18,17 +18,17 @@ User = get_user_model()
 
 
 class CreateCategory(LoginRequiredMixin,generic.CreateView):
-    template_name='categories/categories_form.html'
+    template_name='category/category_form.html'
     form_class=forms.CategoryForm
-    redirect_field_name ='categories:by_category'
+    redirect_field_name ='category:by_category'
     
     def form_valid(self,form):
 
         name=form.cleaned_data['name']
 
-        if not models.Categories.objects.filter(name=name).exists():
-            models.Categories.objects.create(name=name)
-        category=models.Categories.objects.filter(name=name).get()
+        if not models.Category.objects.filter(name=name).exists():
+            models.Category.objects.create(name=name)
+        category=models.Category.objects.filter(name=name).get()
         try:
             models.UserCategory.objects.create(user=self.request.user,category=category)
 
@@ -38,12 +38,12 @@ class CreateCategory(LoginRequiredMixin,generic.CreateView):
         else:
             messages.success(self.request,"Category {} created.".format(category.name))
         
-        return HttpResponseRedirect(reverse('categories:all'))
+        return HttpResponseRedirect(reverse('category:all'))
 
 
 class CreateNote(LoginRequiredMixin,generic.CreateView):
-    template_name='categories/notes_form.html'
-    form_class=forms.NotesForm
+    template_name='category/note_form.html'
+    form_class=forms.NoteForm
    
     
 
@@ -52,44 +52,52 @@ class CreateNote(LoginRequiredMixin,generic.CreateView):
         text=form.cleaned_data['message']
         password=form.cleaned_data['password']
        
-        category=models.Categories.objects.filter(
+        category=models.Category.objects.filter(
                 slug=self.kwargs.get("slug")).get()
-        if not models.Notes.objects.filter(name=name, user=self.request.user ).exists():
+        if not models.Note.objects.filter(name=name, user=self.request.user ).exists():
             
             encr=hexlify(encrypt(str(password),str(text)))
           
-            models.Notes.objects.create(name=name, password='0', encrypted=True, message=encr, category=category, user= self.request.user) 
+            models.Note.objects.create(name=name, password='0', encrypted=True, message=encr, category=category, user= self.request.user) 
             
             
         
-        return HttpResponseRedirect(reverse('categories:by_category', kwargs={'slug':category.slug}))
+        return HttpResponseRedirect(reverse('category:by_category', kwargs={'slug':category.slug}))
 
 
 class ListCategory(LoginRequiredMixin,generic.ListView):
 
     model = models.UserCategory
-   
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.filter(user_id=self.request.user.id)
 
 
 class UserNotes(LoginRequiredMixin,generic.ListView):
-    model = models.Notes
-    template_name = "categories/notes_list.html"
+    model = models.Note
+    template_name = "category/note_list.html"
     def get_queryset(self):
-        self.category=get_object_or_404(models.Categories, slug=self.kwargs['slug'])
-        return models.Notes.objects.filter(category=self.category, user=self.request.user)
+        self.category=get_object_or_404(models.Category, slug=self.kwargs['slug'])
+        First=models.Note.objects.filter(category=self.category, user=self.request.user)
+        my_set=[First,self.category]
+        return my_set
 
     
 
 class NotesDetail(LoginRequiredMixin,generic.DetailView):
-    model=models.Notes
-    template_name='categories/notes_detail.html'
+    model=models.Note
+    template_name='category/note_detail.html'
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.filter(user_id=self.request.user.id)
+
 
 
 
 
 class Decrpt(LoginRequiredMixin,generic.UpdateView):
-    template_name='categories/notes_detail.html'
-    model=models.Notes
+    template_name='category/note_detail.html'
+    model=models.Note
     fields = ['password']
 
     def post(self, request, *args, **kwargs):
@@ -112,16 +120,17 @@ class Decrpt(LoginRequiredMixin,generic.UpdateView):
         else:
             self.object.message=hexlify(encrypt(str(password),str(message)))
             self.object.encrypted=True
+            self.object.edit()
             self.object.save()
         
-        return HttpResponseRedirect(reverse('categories:notes_detail',
+        return HttpResponseRedirect(reverse('category:note_detail',
                             kwargs={'pk': self.object.pk})) 
     
 
 class NoteDelete(LoginRequiredMixin,generic.DeleteView):
-    model = models.Notes
-    select_related = ("user", "notes")
-    success_url = reverse_lazy("categories:all")
+    model = models.Note
+    select_related = ("user", "note")
+    success_url = reverse_lazy("category:all")
 
     def get_queryset(self):
         queryset = super().get_queryset()
