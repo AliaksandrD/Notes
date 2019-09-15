@@ -1,46 +1,48 @@
 {% extends "categories/categories_base.html" %}
 
 {% block content %}
-{% if user.is_authenticated and user == notes.user %}
+{% if user.is_authenticated and user == note.user %}
 <div class="row align-items-start">
     <div class="col-md-4">
-<h1>{{ notes.user|capfirst }}</h1>
-    <h1>Title: {{ notes.name|safe }}</h1>
+<h1>{{ note.user|capfirst }}</h1>
+    <h1>Title: {{ note.name|safe }}</h1>
     
-   <time class="time"><a href="{% url 'categories:notes_detail' pk=notes.pk %}">{{ notes.created_at }}</a></time> </div>
+   <time class="time"><a href="{% url 'category:note_detail' pk=note.pk %}">Edited at:{{ note.created_at }}</a></time>
+   
+    </div>
    <div class="col-md-6">
-    {% if notes.encrypted %}
+    {% if note.encrypted %}
     
-    <div class="container limit"><h1> {{notes.message|slice:20}}...</h1></div></div>
+    <div class="container limit"><h1> {{note.message|slice:20}}...</h1></div></div>
     <div class="col-md-2"></div>
     <div class="row align-items-end">
         <div class="col-md-12">
         <div class="container allign-center">
-            <form action="{% url 'categories:decrypt' pk=notes.pk %}" method="post">
+            <form action="{% url 'category:decrypt' pk=note.pk %}" method="post">
             {% csrf_token %}
             <div class="form-group">
                 <label for="exampleInputPassword1">Password</label>
                 <input type="password" class="form-control" id="exampleInputPassword1" name='password'placeholder="Password">
-                <button type="submit" class="btn btn-primary" name='encrypt'>Decrypt/Encrypt</button>
-                <a class="btn btn-danger" href="{% url 'categories:delete_note' pk=notes.pk %}" role="button"><span class=" glyphicon glyphicon-remove ">Delete</a>
+                <button type="submit" class="btn btn-primary" name='encrypt'>Decrypt</button>
+                <a class="btn btn-danger" href="{% url 'category:delete_note' pk=note.pk %}" role="button"><span class=" glyphicon glyphicon-remove ">Delete</a>
               </div>
             </form>
         </div>
         </div>
         </div>
     {% else %}
-    <form action="{% url 'categories:decrypt' pk=notes.pk %}" method="post"> 
+    <form action="{% url 'category:decrypt' pk=note.pk %}" method="post"> 
             {% csrf_token %}
                 
                 <div class="form-group">
                         <label for="exampleFormControlTextarea1">Decoded Message</label>
-                        <textarea class="form-control text-blk" id="exampleFormControlTextarea1" name='message'rows="5" >{{notes.message}}</textarea>
+                        <textarea class="form-control text-blk" id="exampleFormControlTextarea1" name='message'rows="5" >{{note.message}}</textarea>
                 </div>
                 <div class="form-group">
                         <label for="exampleInputPassword1">Password</label>
                         <input type="password" class="form-control" id="exampleInputPassword1" name='password'placeholder="Password">
-                        <button type="submit" class="btn btn-primary" name='encrypt'>Save and Encrypt</button>
-                        <a class="btn btn-danger" href="{% url 'categories:delete_note' pk=notes.pk %}" role="button"><span class=" glyphicon glyphicon-remove ">Delete</a>
+                        <button type="submit" class="btn btn-primary" name='encrypt'>Encrypt</button>
+                        <a class="btn btn-danger" href="{% url 'category:delete_note' pk=note.pk %}" role="button"><span class=" glyphicon glyphicon-remove ">Delete</a>
                 </div>
         </form>
     {% endif %}  

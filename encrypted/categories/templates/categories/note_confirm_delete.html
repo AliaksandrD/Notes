@@ -8,7 +8,7 @@
 <form method="POST">
 	{% csrf_token %}
 	<input type="submit" value="Confirm Delete" class="btn btn-danger btn-large">
-	<a href="{% url 'categories:notes_detail' pk=object.pk %}" class="btn btn-light btn-large">Cancel</a>
+	<a href="{% url 'category:note_detail' pk=object.pk %}" class="btn btn-light btn-large">Cancel</a>
 </form>
 
 {% endblock %}

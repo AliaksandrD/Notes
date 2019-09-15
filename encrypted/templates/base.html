@@ -32,7 +32,7 @@
 
     					<ul class="nav navbar-nav navbar-right">
     						{% if user.is_authenticated %}
-                      <li><a href="{% url 'categories:all' %}" class="btn btn-simple">Categories</a></li>
+                      <li><a href="{% url 'category:all' %}" class="btn btn-simple">Categories</a></li>
                       
                       <li><a href="{% url 'login:logout' %}" class="btn btn-simple">Log out</a></li>
     						{% else %}
