@@ -27,7 +27,7 @@ urlpatterns = [
     re_path(r"^loggedin/$", views.LoggedIn.as_view(), name="logged_in"),
     re_path(r"^thanks/$", views.ThanksPage.as_view(), name="thanks"),
     re_path(r"^login/", include("django.contrib.auth.urls")),
-    path('categories/',include("categories.urls", namespace="categories")),
+    path('category/',include("categories.urls", namespace="category")),
 ]
       
     

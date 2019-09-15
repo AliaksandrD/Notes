@@ -3,13 +3,13 @@ from . import models
 
 class CategoryForm(forms.ModelForm):
     class Meta:
-        model=models.Categories
+        model=models.Category
         fields=['name']
 
 
-class NotesForm(forms.ModelForm):
+class NoteForm(forms.ModelForm):
     class Meta:
-        model = models.Notes
+        model = models.Note
         fields=['name','message','password']
 
 
