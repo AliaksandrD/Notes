@@ -7,7 +7,7 @@ from django.utils import timezone
 User=get_user_model()
 
 
-class Categories(models.Model):
+class Category(models.Model):
     name=models.CharField(max_length=50)
     slug=models.SlugField(allow_unicode=True)
     user = models.ManyToManyField(User,through="UserCategory")
@@ -27,16 +27,16 @@ class Categories(models.Model):
         ordering = ["name"]
 
 
-class Notes(models.Model):
+class Note(models.Model):
     name=models.CharField(max_length=50, blank=False)
     
     created_at = models.DateTimeField(auto_now=True)
-    edited_at = models.DateTimeField(blank=True, null=True)
+   
     message = models.TextField()
     password=models.CharField(max_length=100,blank=False)
     encrypted=models.BooleanField(default=False)
     user = models.ForeignKey(User,related_name='user_notes',on_delete=models.CASCADE)
-    category=models.ForeignKey(Categories,on_delete=models.CASCADE,related_name="notes_cat",blank=False)
+    category=models.ForeignKey(Category,on_delete=models.CASCADE,related_name="notes_cat",blank=False)
 
     def __str__(self):
         return self.name
@@ -44,14 +44,8 @@ class Notes(models.Model):
     def edit(self):
         self.edited_at=timezone.now()
         self.save()
+   
 
-    def encrypt(self):
-        self.encrypted=True
-        self.save()
-
-    def decrypt(self):
-        self.encrypted=False
-        self.save
 
     def get_absolute_url(self):
         return reverse("categories:note", kwargs={'username':self.user.username, 'pk':self.pk})
@@ -62,7 +56,7 @@ class Notes(models.Model):
 
 class UserCategory(models.Model):
     
-    category = models.ForeignKey(Categories,related_name='category_notes',on_delete=models.CASCADE)
+    category = models.ForeignKey(Category,related_name='category_notes',on_delete=models.CASCADE)
     user = models.ForeignKey(User,related_name='user_category',on_delete=models.CASCADE)
     
     
@@ -72,4 +66,7 @@ class UserCategory(models.Model):
 
     class Meta:
         unique_together = ["user",'category']
+
+
+
 
