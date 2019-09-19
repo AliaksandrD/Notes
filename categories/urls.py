@@ -10,7 +10,9 @@ urlpatterns = [
     path("notes/in/<slug>/<pk>/new", views.CreateNote.as_view(), name="new_note"),
     path('notes/detail/<pk>', views.NotesDetail.as_view(), name='note_detail'),
     path('notes/decrypt/<pk>', views.Decrpt.as_view(), name='decrypt'),
-    path('delete/<pk>/', views.NoteDelete.as_view(), name='delete_note')
+    path('delete/note/<pk>/', views.NoteDelete.as_view(), name='delete_note'),
+    path('delete/category/<pk>/',
+         views.CategoryDelete.as_view(), name='delete_category')
 
 
 ]

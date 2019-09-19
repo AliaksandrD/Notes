@@ -3,7 +3,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse, reverse_lazy
 from django.http import Http404, HttpResponseRedirect
 from django.views import generic
-from django.contrib import messages
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
@@ -43,7 +42,7 @@ class CreateNote(LoginRequiredMixin, generic.CreateView):
 
         encr = hexlify(encrypt(str(password), str(text)))
 
-        models.Note.objects.create(name=name, password='0', encrypted=True,
+        models.Note.objects.create(name=name, password='0',
                                    message=encr, category=category, user=self.request.user)
 
         return HttpResponseRedirect(reverse('category:by_category', kwargs={'slug': category.slug, 'pk': category.pk}))
@@ -96,11 +95,9 @@ class Decrpt(LoginRequiredMixin, generic.UpdateView):
                 context['message'] = decrypt(password, unhexlify(
                     self.object.message[2:-1])).decode('utf-8')
             except DecryptionException:  # if wrong password return to detail note page
-                messages.warning(self.request, ("Wrong Password"))
                 return render(request, 'categories/note_detail.html', context=context)
 
             else:
-                messages.success(self.request, "Encrypted")
                 return render(request, 'categories/note_detail.html', context=context)
         else:  # if form for decryption-> change meessage-> save()
             self.object.message = hexlify(encrypt(str(password), str(message)))
@@ -118,5 +115,17 @@ class NoteDelete(LoginRequiredMixin, generic.DeleteView):
         return queryset.filter(user_id=self.request.user.id)
 
     def delete(self, *args, **kwargs):
-        messages.success(self.request, "Note Deleted")
+        return super().delete(*args, **kwargs)
+
+
+class CategoryDelete(LoginRequiredMixin, generic.DeleteView):
+    model = models.Category
+    select_related = ("user", "category")
+    success_url = reverse_lazy("category:all")
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.filter(user_id=self.request.user.id)
+
+    def delete(self, *args, **kwargs):
         return super().delete(*args, **kwargs)

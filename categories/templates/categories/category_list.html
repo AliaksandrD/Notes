@@ -17,6 +17,8 @@
 
         <a href="{% url 'category:new_note' slug=category.slug pk=category.pk %}" class="btn btn-warning btn-sm"
             role="button"><span class="glyphicon glyphicon-plus"></span>Note</a>
+        <a class="btn btn-danger btn-sm" href="{% url 'category:delete_category' pk=category.pk %}" role="button"><span
+                class=" glyphicon glyphicon-remove "></a>
 
 
         {% endif %}
