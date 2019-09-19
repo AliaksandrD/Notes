@@ -18,7 +18,7 @@ User = get_user_model()
 
 
 class CreateCategory(LoginRequiredMixin, generic.CreateView):
-    template_name = 'category/category_form.html'
+    template_name = 'categories/category_form.html'
     form_class = forms.CategoryForm
     redirect_field_name = 'category:by_category'
 
@@ -30,7 +30,7 @@ class CreateCategory(LoginRequiredMixin, generic.CreateView):
 
 
 class CreateNote(LoginRequiredMixin, generic.CreateView):
-    template_name = 'category/note_form.html'
+    template_name = 'categories/note_form.html'
     form_class = forms.NoteForm
 
     def form_valid(self, form):
@@ -50,7 +50,6 @@ class CreateNote(LoginRequiredMixin, generic.CreateView):
 
 
 class ListCategory(LoginRequiredMixin, generic.ListView):
-
     model = models.Category
 
     def get_queryset(self):
@@ -59,7 +58,7 @@ class ListCategory(LoginRequiredMixin, generic.ListView):
 
 class UserNotes(LoginRequiredMixin, generic.ListView):
     model = models.Note
-    template_name = "category/note_list.html"
+    template_name = "categories/note_list.html"
 
     def get_queryset(self):
         self.category = get_object_or_404(
@@ -72,7 +71,7 @@ class UserNotes(LoginRequiredMixin, generic.ListView):
 
 class NotesDetail(LoginRequiredMixin, generic.DetailView):
     model = models.Note
-    template_name = 'category/note_detail.html'
+    template_name = 'categories/note_detail.html'
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -80,35 +79,33 @@ class NotesDetail(LoginRequiredMixin, generic.DetailView):
 
 
 class Decrpt(LoginRequiredMixin, generic.UpdateView):
-    template_name = 'category/note_detail.html'
+    template_name = 'categories/note_detail.html'
     model = models.Note
     fields = ['password']
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
+        context = {}
         password = request.POST.get('password')
         message = request.POST.get('message')
-        print(self.object.encrypted)
-        if self.object.encrypted:
-            try:
-                self.object.message = decrypt(password, unhexlify(
+        context['note'] = self.object
+        checkbox = request.POST.get('encrypted')
+
+        if checkbox == '1':  # checks if form for decoding
+            try:  # try to decode message
+                context['message'] = decrypt(password, unhexlify(
                     self.object.message[2:-1])).decode('utf-8')
-                self.object.encrypted = False
-                self.object.save()
-            except DecryptionException:
+            except DecryptionException:  # if wrong password return to detail note page
                 messages.warning(self.request, ("Wrong Password"))
+                return render(request, 'categories/note_detail.html', context=context)
 
             else:
                 messages.success(self.request, "Encrypted")
-
-        else:
+                return render(request, 'categories/note_detail.html', context=context)
+        else:  # if form for decryption-> change meessage-> save()
             self.object.message = hexlify(encrypt(str(password), str(message)))
-            self.object.encrypted = True
-            self.object.edit()
             self.object.save()
-
-        return HttpResponseRedirect(reverse('category:note_detail',
-                                            kwargs={'pk': self.object.pk}))
+            return render(request, 'categories/note_detail.html', context=context)
 
 
 class NoteDelete(LoginRequiredMixin, generic.DeleteView):

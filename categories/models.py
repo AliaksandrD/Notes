@@ -33,7 +33,6 @@ class Note(models.Model):
     created_at = models.DateTimeField(auto_now=True)
     message = models.TextField()
     password = models.CharField(max_length=100, blank=False)
-    encrypted = models.BooleanField(default=False)
     user = models.ForeignKey(
         User, related_name='user_notes', on_delete=models.CASCADE)
     category = models.ForeignKey(
@@ -41,10 +40,6 @@ class Note(models.Model):
 
     def __str__(self):
         return self.name
-
-    def edit(self):
-        self.edited_at = timezone.now()
-        self.save()
 
     def get_absolute_url(self):
         return reverse("categories:note", kwargs={'username': self.user.username, 'pk': self.pk})
