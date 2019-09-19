@@ -1,6 +1,0 @@
-{
-    "python.pythonPath": "/home/alex/.local/share/virtualenvs/Notes-Sx54EpcJ/bin/python",
-    "python.linting.pylintEnabled": true,
-    "python.linting.pep8Enabled": true,
-    "python.linting.enabled": true
-}
