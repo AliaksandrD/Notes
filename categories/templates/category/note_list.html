@@ -3,29 +3,33 @@
 {% block categories %}
 <div class="row"></div>
 <div class="col-md-4">
-	<p>{{ user|capfirst }} Notes</p>
-       
-<div class="container">
-    {% for note in object_list.0 %}
-    
-        {% if user.is_authenticated %}
-          
-        
-    
-    
-        <a href="{% url 'category:note_detail' pk=note.pk %}"> <h1>{{note.name}}</h1></a>
-       
-        
-        {% endif %}
-    {% endfor %}
-    {% if user.is_authenticated %}
-   
-       <br> <a href="{% url 'category:new_note' slug=object_list.1.slug %}" class="btn btn-primary btn-lg btn-block" role="button"><span class="glyphicon glyphicon-plus"></span> Crate New Note</a>
-    
-	{% endif %}
-	    
+    <p>{{ user|capfirst }} Notes</p>
 
-</div>
+    <div class="container">
+        {% for note in object_list.0 %}
+
+        {% if user.is_authenticated %}
+
+
+
+
+        <a href="{% url 'category:note_detail' pk=note.pk %}">
+            <h1>{{note.name}}</h1>
+        </a>
+
+
+        {% endif %}
+        {% endfor %}
+        {% if user.is_authenticated %}
+
+        <br> <a href="{% url 'category:new_note' slug=object_list.1.slug pk=object_list.1.pk %}"
+            class="btn btn-primary btn-lg btn-block" role="button"><span class="glyphicon glyphicon-plus"></span> Crate
+            New Note</a>
+
+        {% endif %}
+
+
+    </div>
 
 </div>
 
