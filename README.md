@@ -1,26 +1,35 @@
 ## INSTALL
-
+To install project from this branch do following
 ```bash
-$ pipenv install --dev
+$ git clone https://github.com/AliaksandrD/Notes.git
+$ cd Notes/
+$ git fetch
+$ git checkout fix_mistakes
 ```
 
-#### true way to create new migrations
+For instalation need have docker-compose installed
 
 ```bash
-$ ./manage.py makemigrations login
-$ ./manage.py makemigrations categories
+$ docker-compose build
+```
+
+#### For app runing need to proceed migrations
+
+```bash
+$ docker-compose run web python Source/manage.py migrate
+$ docker-compose run web python Source/manage.py makemigrations categories
 ```
 
 rollup the new migrations to db
 ```bash
-$ ./manage.py migrate
+$ docker-compose run web python Source/manage.py migrate
 ```
 
 
 ##RUN Project
 
 ```bash
-$ ./manage.py runserver
+$ docker-compose up
 ```
 
-After can open link in your web browser 
+After can open link in your web browser at http://0.0.0.0:8000

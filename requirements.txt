@@ -1,0 +1,8 @@
+-i https://pypi.org/simple
+django-bootstrap3==11.1.0
+django==2.2.4
+psycopg2==2.8.3
+pycrypto==2.6.1
+pytz==2019.2
+simple-crypt==4.1.7
+sqlparse==0.3.0

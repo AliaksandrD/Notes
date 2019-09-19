@@ -5,10 +5,12 @@ verify_ssl = true
 
 [dev-packages]
 
+
 [packages]
 django = "==2.2.4"
 simple-crypt = "*"
 django-bootstrap3 = "*"
+psycopg2-binary="*"
 
 [requires]
 python_version = "3.7"
