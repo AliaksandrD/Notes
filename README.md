@@ -10,20 +10,10 @@ $ git checkout fix_mistakes
 For instalation need have docker-compose installed
 
 ```bash
+$ sudo chown -R $USER:$USER .
 $ docker-compose build
 ```
 
-#### For app runing need to proceed migrations
-
-```bash
-$ docker-compose run web python Source/manage.py migrate
-$ docker-compose run web python Source/manage.py makemigrations categories
-```
-
-rollup the new migrations to db
-```bash
-$ docker-compose run web python Source/manage.py migrate
-```
 
 
 ##RUN Project
