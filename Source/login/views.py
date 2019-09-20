@@ -5,7 +5,9 @@ from django.views import generic
 from . import forms
 # Create your views here.
 
-#User Signup view
+# User Signup view
+
+
 class SignUp(generic.CreateView):
     form_class = forms.UserCreateForm
     success_url = reverse_lazy("login")

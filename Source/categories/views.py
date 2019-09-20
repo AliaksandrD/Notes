@@ -99,6 +99,7 @@ class Decrpt(LoginRequiredMixin, generic.UpdateView):
 
             else:
                 return render(request, 'categories/note_detail.html', context=context)
+
         else:  # if form for decryption-> change meessage-> save()
             self.object.message = hexlify(encrypt(str(password), str(message)))
             self.object.save()

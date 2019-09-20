@@ -10,7 +10,6 @@ User = get_user_model()
 class Category(models.Model):
     name = models.CharField(max_length=50)
     slug = models.SlugField(allow_unicode=True)
-    # user = models.ManyToManyField(User,through="UserCategory")
     user = models.ForeignKey(
         User, related_name='user_category', on_delete=models.CASCADE)
 

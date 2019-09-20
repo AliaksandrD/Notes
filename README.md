@@ -16,7 +16,7 @@ $ docker-compose build
 
 
 
-##RUN Project
+## RUN Project
 
 ```bash
 $ docker-compose up
